@@ -6,7 +6,8 @@ Twitter automated bot, grow fast&easy
 3. Retweet
 4. Follow
 5. Unfollow not followed-back users
-
+# Edit
+Becareful DO NOT FORGET to edit&replace URLs and IDs in the code !
 # Requirements
 ```
 Python 3.x
