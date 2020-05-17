@@ -102,9 +102,9 @@ def retweet():
         driver.switch_to.window(driver.window_handles[1])
         if retwt == 1:
             print("Retweet: True")
-            retwts = range(2)
+            retwts = range(1) # total retweet sources 
             retwts = random.choice(retwts)
-            retsource = ['user url for retweet source']
+            retsource = ['user profile url for retweet source']
             rturl = retsource[retwts]
             driver.get(rturl)
             time.sleep(30)
@@ -143,7 +143,7 @@ def tweet():
 def follow_Proccess():
     # will randomly pick one of these below sources and then follow their n last followers
     simpland = ["someoneid"]
-    simpn = range(10) # number of total sources ***
+    simpn = range(1) # number of total sources ***
     simpn = random.choice(simpn)
     fwurl = "https://twitter.com/"+simpland[simpn]+"/followers"
     driver.execute_script("window.open('');")
