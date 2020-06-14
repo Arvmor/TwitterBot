@@ -1,3 +1,4 @@
+[![bitcoin-black](https://github.com/Ximi1970/Donate/blob/master/bitcoin-donate-black.png)](https://www.blockchain.com/btc/address/1LQKZHNSzBZeEc7tkdz3McpQkJDsreaHLN)
 # TwitterBot
 Twitter automated bot, grow fast&easy
 # Demo
