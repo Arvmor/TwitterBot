@@ -128,10 +128,10 @@ def tweet(tweetText):
     sleep(30)
     sleep(2)
     driver.find_element(
-        By.XPATH, '//*[@id="react-root"]/div/div/div[1]/div[2]/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div[2]/div').send_keys(tweetText)
+        By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div[1]/div').send_keys(tweetText)
     sleep(2)
     driver.find_element(
-        By.XPATH, '//*[@id="react-root"]/div/div/div[1]/div[2]/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[4]').click()
+        By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[4]').click()
     sleep(2)
 
 
@@ -232,13 +232,14 @@ while True:
 runtimehour = 0
 tweeted = False
 # unfollow not followed-bck
-try:
-    unfollow2()
-    clear()
-    unfollow()
-    clear()
-except:
-    pass
+if argv[2] == 1:
+    try:
+        unfollow2()
+        clear()
+        unfollow()
+        clear()
+    except:
+        pass
 while True:
     # tbh i don't know how to handle crashes :3
     if runtimehour == 14:
