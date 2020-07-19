@@ -159,6 +159,7 @@ def pickpost():
         tweetText = credentials.errorText[choice(
             range(len(credentials.errorText)))]
         return tweetText
+    print(tweetText)
     return tweetText
 
 
@@ -196,7 +197,7 @@ def follow_Proccess():
 # driver settings
 chromedriver = "chromedriver.exe"
 chrome_options = webdriver.ChromeOptions()
-# chrome_options.add_argument("--headless")
+chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--log-level=3")
