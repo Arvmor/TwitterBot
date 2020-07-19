@@ -9,6 +9,8 @@ from time import sleep
 from random import choice
 from bs4 import BeautifulSoup
 from sys import path
+from urllib.request import urlopen
+import credentials
 
 # you have to authorize your account with below api IF you want to unfollow people
 # there is a high chance to get LIMIT while using below api
@@ -144,6 +146,37 @@ def tweet():
     sleep(2)
 
 
+def pickpost():
+    # it will pick a random post from telegram channel which in here is our tweet source
+    pnumber = range(162000)
+    pnumber = choice(pnumber)
+    page = urlopen(
+        'https://t.me/OfficialPersianTwitter/'+str(pnumber))
+    soup = BeautifulSoup(page, "html.parser")
+    url = soup.find("meta",  property="og:description")
+    twtext = url["content"].strip()
+    ch = -24
+    while abs(ch) != len(twtext):
+        if twtext[ch] == '》' or twtext[ch] == '×' or twtext[ch] == '•' or twtext[ch] == '»' or twtext[ch] == '*' or twtext[ch] == '※':
+            twtext = twtext[:ch]
+        ch -= 1
+    twtext = twtext.strip()
+    # this is so returded but it works
+    ch = -1
+    while abs(ch) != len(twtext):
+        if twtext[ch] == '×' or twtext[ch] == '•' or twtext[ch] == '*' or twtext[ch] == '※':
+            twtext = twtext[:ch]
+        ch -= 1
+    twtext = twtext.strip()
+    if twtext[1:42] == 'هیچ گونه پست ارسالی در کانال قرار نمیگیرد':
+        erroretxt = ['فالو کنید بک میدم, خوشحال میشم فیو بزنید', 'توییت خوباتونو بفرستید فیو بزنم، بجاش هل ام بدید', '<فاخر نویسه، زخمه ساسپند خورده ای هستم. لطفا ریتم کنید 3',
+                     'ممنون میشم اگه توییت جالبامو ریتوییت کنید تا دوستاتونم ببین مرسیی', 'دوران غم پس از ساسپندو میگذرونم، شخمم میزنید لطفا :)))']
+        rndee = choice(range(5))
+        twtext = erroretxt[rndee]
+        return twtext
+    return twtext
+
+
 def follow_Proccess():
     # will randomly pick one of these below sources and then follow their n last followers
     simpland = ["someoneid"]
@@ -178,7 +211,6 @@ def follow_Proccess():
 
 
 # driver settings
-path.insert(0, '/usr/lib/chromium-browser/chromedriver')
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
@@ -190,18 +222,18 @@ sleep(30)
 # login
 while True:
     driver.find_element(
-        By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys("username")
+        By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[0][0])
     driver.find_element(
-        By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys("password")
+        By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[0][1])
     driver.find_element(
         By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
     sleep(2)
     try:
         if driver.find_element(By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/span').text != "":
             driver.find_element(
-                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys('email')
+                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[0][2])
             driver.find_element(
-                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys('password')
+                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[0][1])
             sleep(2)
             driver.find_element(
                 By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
