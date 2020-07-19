@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from random import choice
 from bs4 import BeautifulSoup
-from sys import path
+from sys import path, argv
 from urllib.request import urlopen
 import credentials
 
@@ -37,7 +37,7 @@ def unfollow2():
                 totalUnFollowed += 1
                 sleep(4)
             userPerPage = 0
-            driver.get(url)
+            driver.get('https://www.unfollowspy.com/notfollow.php')
             sleep(15)
     except:
         pass
@@ -99,9 +99,9 @@ def retweet():
         driver.switch_to.window(driver.window_handles[1])
         if retweetChance == 1:
             print("Retweet: True")
-            ProfileToSelectTweet = choice(range(1))  # total retweet sources
-            retsource = ['user profile url for retweet source']
-            driver.get(retsource[ProfileToSelectTweet])
+            ProfileToSelectTweet = choice(
+                range(len(credentials.retweetSource)))
+            driver.get(credentials.retweetSource[ProfileToSelectTweet])
             sleep(30)
             ret = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
                 (By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div[1]/div/div/div/div/article/div/div[2]/div[2]/div[2]/div[3]/div[2]/div')))
@@ -119,7 +119,7 @@ def clear():  # will close useless tabs
     driver.switch_to.window(driver.window_handles[0])
 
 
-def tweet():
+def tweet(tweetText):
     # tweet function, it will tweet whatever is in the tweetText variable
     driver.execute_script("window.open('');")
     sleep(1)
@@ -128,7 +128,7 @@ def tweet():
     sleep(30)
     sleep(2)
     driver.find_element(
-        By.XPATH, '//*[@id="react-root"]/div/div/div[1]/div[2]/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div[2]/div').send_keys("Hi, This is automated Twitter-BOT checkout https://github.com/Goodzilam/TwitterBot")
+        By.XPATH, '//*[@id="react-root"]/div/div/div[1]/div[2]/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div[2]/div').send_keys(tweetText)
     sleep(2)
     driver.find_element(
         By.XPATH, '//*[@id="react-root"]/div/div/div[1]/div[2]/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[4]').click()
@@ -156,21 +156,20 @@ def pickpost():
         ch -= 1
     tweetText = tweetText.strip()
     if tweetText[1:42] == 'هیچ گونه پست ارسالی در کانال قرار نمیگیرد':
-        errorText = ['فالو کنید بک میدم, خوشحال میشم فیو بزنید', 'توییت خوباتونو بفرستید فیو بزنم، بجاش هل ام بدید', '<فاخر نویسه، زخمه ساسپند خورده ای هستم. لطفا ریتم کنید 3',
-                     'ممنون میشم اگه توییت جالبامو ریتوییت کنید تا دوستاتونم ببین مرسیی', 'دوران غم پس از ساسپندو میگذرونم، شخمم میزنید لطفا :)))']
-        tweetText = errorText[choice(range(5))]
+        tweetText = credentials.errorText[choice(
+            range(len(credentials.errorText)))]
         return tweetText
     return tweetText
 
 
 def follow_Proccess():
     # will randomly pick one of these below sources and then follow their n last followers
-    idList = ["someoneid"]
-    randomNumber = choice(range(1))  # number of total sources ***
+    randomNumber = choice(range(len(credentials.followIdList)))
     driver.execute_script("window.open('');")
     sleep(1)
     driver.switch_to.window(driver.window_handles[1])
-    driver.get(f"https://twitter.com/{idList[randomNumber]}/followers")
+    driver.get(
+        f"https://twitter.com/{credentials.followIdList[randomNumber]}/followers")
     sleep(30)
     # starts following
     acc = 1
@@ -203,24 +202,23 @@ chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--log-level=3")
 chrome_options.add_argument("--log-level=OFF")
 driver = webdriver.Chrome("chromedriver", options=chrome_options)
-url = "https://twitter.com/login"
-driver.get(url)
+driver.get("https://twitter.com/login")
 sleep(30)
 # login
 while True:
     driver.find_element(
-        By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[0][0])
+        By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][0])
     driver.find_element(
-        By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[0][1])
+        By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][1])
     driver.find_element(
         By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
     sleep(2)
     try:
         if driver.find_element(By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/span').text != "":
             driver.find_element(
-                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[0][2])
+                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][2])
             driver.find_element(
-                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[0][1])
+                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][1])
             sleep(2)
             driver.find_element(
                 By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
@@ -233,13 +231,13 @@ while True:
 runtimehour = 0
 tweeted = False
 # unfollow not followed-bck
-# try:
-#     unfollow2()
-#     clear()
-#     unfollow()
-#     clear()
-# except:
-#     pass
+try:
+    unfollow2()
+    clear()
+    unfollow()
+    clear()
+except:
+    pass
 while True:
     # tbh i don't know how to handle crashes :3
     if runtimehour == 14:
@@ -249,9 +247,8 @@ while True:
         try:
             # selects a random post and then it will tweet it
             if tweeted == False:
-                pickpost()
                 sleep(2)
-                tweet()
+                tweet(pickpost())
                 clear()
             tweeted = True
             sleep(2)
