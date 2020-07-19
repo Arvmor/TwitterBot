@@ -17,29 +17,27 @@ import credentials
 
 
 def unfollow2():
-    unfurl = 'https://www.unfollowspy.com/twittersignin.php'
     driver.execute_script("window.open('');")
     sleep(1)
     driver.switch_to.window(driver.window_handles[1])
-    driver.get(unfurl)
+    driver.get('https://www.unfollowspy.com/twittersignin.php')
     sleep(20)
-    unfurl = 'https://www.unfollowspy.com/notfollow.php'
-    driver.get(unfurl)
+    driver.get('https://www.unfollowspy.com/notfollow.php')
     sleep(30)
-    userf = 0
-    totalunf = 0
+    userPerPage = 0
+    totalUnFollowed = 0
     try:
-        while totalunf != 100:
-            while userf != 20:
+        while totalUnFollowed != 100:
+            while userPerPage != 20:
                 driver.find_element(
-                    By.XPATH, '//*[@id="actionbutton'+str(userf)+'"]').location_once_scrolled_into_view
+                    By.XPATH, '//*[@id="actionbutton'+str(userPerPage)+'"]').location_once_scrolled_into_view
                 driver.find_element(
-                    By.XPATH, '//*[@id="actionbutton'+str(userf)+'"]').click()
-                userf += 1
-                totalunf += 1
+                    By.XPATH, '//*[@id="actionbutton'+str(userPerPage)+'"]').click()
+                userPerPage += 1
+                totalUnFollowed += 1
                 sleep(4)
-            userf = 0
-            driver.get(unfurl)
+            userPerPage = 0
+            driver.get(url)
             sleep(15)
     except:
         pass
@@ -49,21 +47,20 @@ def unfollow2():
 
 
 def unfollow():
-    unfurl = 'https://iunfollow.com/accounts/twitter/login/?next=/nonfollow'
     driver.execute_script("window.open('');")
     sleep(1)
     driver.switch_to.window(driver.window_handles[1])
-    driver.get(unfurl)
+    driver.get('https://iunfollow.com/accounts/twitter/login/?next=/nonfollow')
     sleep(30)
-    userf = 100
+    usersToUnFollow = 100
     try:
         sleep(4)
-        while userf != 51:
+        while usersToUnFollow != 51:
             driver.find_element(
-                By.XPATH, '/html/body/div[2]/div/section[2]/div/div/div/div[2]/ul/li['+str(userf)+']/div[2]/button[1]').location_once_scrolled_into_view
+                By.XPATH, '/html/body/div[2]/div/section[2]/div/div/div/div[2]/ul/li['+str(usersToUnFollow)+']/div[2]/button[1]').location_once_scrolled_into_view
             driver.find_element(
-                By.XPATH, '/html/body/div[2]/div/section[2]/div/div/div/div[2]/ul/li['+str(userf)+']/div[2]/button[1]').click()
-            userf -= 1
+                By.XPATH, '/html/body/div[2]/div/section[2]/div/div/div/div[2]/ul/li['+str(usersToUnFollow)+']/div[2]/button[1]').click()
+            usersToUnFollow -= 1
             sleep(2)
     except:
         pass
@@ -71,15 +68,13 @@ def unfollow():
 
 def pintweet():
     try:
-        # pin function with 1% chacne.
-        pin = range(100)
-        pin = choice(pin)
+        # pin function with 1% chance.
+        pin = choice(range(100))
         driver.execute_script("window.open('');")
         driver.switch_to.window(driver.window_handles[1])
         if pin == 1:
             print("Pin : True")
-            pinurl = "https://twitter.com/youraccountID"
-            driver.get(pinurl)
+            driver.get("https://twitter.com/youraccountID")
             sleep(30)
             # basically pinning the last tweet
             flesh = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
@@ -99,17 +94,14 @@ def pintweet():
 def retweet():
     # retweet function with many tweet sources which allows the bot to pick fresh tweets. with 1/15 chance.
     try:
-        retwt = range(12)
-        retwt = choice(retwt)
+        retweetChance = choice(range(12))
         driver.execute_script("window.open('');")
         driver.switch_to.window(driver.window_handles[1])
-        if retwt == 1:
+        if retweetChance == 1:
             print("Retweet: True")
-            retwts = range(1)  # total retweet sources
-            retwts = choice(retwts)
+            ProfileToSelectTweet = choice(range(1))  # total retweet sources
             retsource = ['user profile url for retweet source']
-            rturl = retsource[retwts]
-            driver.get(rturl)
+            driver.get(retsource[ProfileToSelectTweet])
             sleep(30)
             ret = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
                 (By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div[1]/div/div/div/div/article/div/div[2]/div[2]/div[2]/div[3]/div[2]/div')))
@@ -120,22 +112,19 @@ def retweet():
     except:
         pass
 
-# will close usless
 
-
-def clear():
+def clear():  # will close useless tabs
     sleep(1)
     driver.close()
     driver.switch_to.window(driver.window_handles[0])
 
 
 def tweet():
-    # tweet function, it will tweet whatever is in the twtext variable
-    sturl = 'https://twitter.com/compose/tweet'
+    # tweet function, it will tweet whatever is in the tweetText variable
     driver.execute_script("window.open('');")
     sleep(1)
     driver.switch_to.window(driver.window_handles[1])
-    driver.get(sturl)
+    driver.get('https://twitter.com/compose/tweet')
     sleep(30)
     sleep(2)
     driver.find_element(
@@ -148,45 +137,40 @@ def tweet():
 
 def pickpost():
     # it will pick a random post from telegram channel which in here is our tweet source
-    pnumber = range(162000)
-    pnumber = choice(pnumber)
+    postNumbers = choice(range(171509))
     page = urlopen(
-        'https://t.me/OfficialPersianTwitter/'+str(pnumber))
+        'https://t.me/OfficialPersianTwitter/'+str(postNumbers))
     soup = BeautifulSoup(page, "html.parser")
     url = soup.find("meta",  property="og:description")
-    twtext = url["content"].strip()
+    tweetText = url["content"].strip()
     ch = -24
-    while abs(ch) != len(twtext):
-        if twtext[ch] == '》' or twtext[ch] == '×' or twtext[ch] == '•' or twtext[ch] == '»' or twtext[ch] == '*' or twtext[ch] == '※':
-            twtext = twtext[:ch]
+    while abs(ch) != len(tweetText):
+        if tweetText[ch] == '》' or tweetText[ch] == '×' or tweetText[ch] == '•' or tweetText[ch] == '»' or tweetText[ch] == '*' or tweetText[ch] == '※':
+            tweetText = tweetText[:ch]
         ch -= 1
-    twtext = twtext.strip()
-    # this is so returded but it works
+    tweetText = tweetText.strip()
     ch = -1
-    while abs(ch) != len(twtext):
-        if twtext[ch] == '×' or twtext[ch] == '•' or twtext[ch] == '*' or twtext[ch] == '※':
-            twtext = twtext[:ch]
+    while abs(ch) != len(tweetText):
+        if tweetText[ch] == '×' or tweetText[ch] == '•' or tweetText[ch] == '*' or tweetText[ch] == '※':
+            tweetText = tweetText[:ch]
         ch -= 1
-    twtext = twtext.strip()
-    if twtext[1:42] == 'هیچ گونه پست ارسالی در کانال قرار نمیگیرد':
-        erroretxt = ['فالو کنید بک میدم, خوشحال میشم فیو بزنید', 'توییت خوباتونو بفرستید فیو بزنم، بجاش هل ام بدید', '<فاخر نویسه، زخمه ساسپند خورده ای هستم. لطفا ریتم کنید 3',
+    tweetText = tweetText.strip()
+    if tweetText[1:42] == 'هیچ گونه پست ارسالی در کانال قرار نمیگیرد':
+        errorText = ['فالو کنید بک میدم, خوشحال میشم فیو بزنید', 'توییت خوباتونو بفرستید فیو بزنم، بجاش هل ام بدید', '<فاخر نویسه، زخمه ساسپند خورده ای هستم. لطفا ریتم کنید 3',
                      'ممنون میشم اگه توییت جالبامو ریتوییت کنید تا دوستاتونم ببین مرسیی', 'دوران غم پس از ساسپندو میگذرونم، شخمم میزنید لطفا :)))']
-        rndee = choice(range(5))
-        twtext = erroretxt[rndee]
-        return twtext
-    return twtext
+        tweetText = errorText[choice(range(5))]
+        return tweetText
+    return tweetText
 
 
 def follow_Proccess():
     # will randomly pick one of these below sources and then follow their n last followers
-    simpland = ["someoneid"]
-    simpn = range(1)  # number of total sources ***
-    simpn = choice(simpn)
-    fwurl = "https://twitter.com/"+simpland[simpn]+"/followers"
+    idList = ["someoneid"]
+    randomNumber = choice(range(1))  # number of total sources ***
     driver.execute_script("window.open('');")
     sleep(1)
     driver.switch_to.window(driver.window_handles[1])
-    driver.get(fwurl)
+    driver.get(f"https://twitter.com/{idList[randomNumber]}/followers")
     sleep(30)
     # starts following
     acc = 1
@@ -211,11 +195,14 @@ def follow_Proccess():
 
 
 # driver settings
+chromedriver = "chromedriver.exe"
 chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--disable-dev-shm-usage')
-driver = webdriver.Chrome('chromedriver', options=chrome_options)
+# chrome_options.add_argument("--headless")
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--log-level=3")
+chrome_options.add_argument("--log-level=OFF")
+driver = webdriver.Chrome("chromedriver", options=chrome_options)
 url = "https://twitter.com/login"
 driver.get(url)
 sleep(30)
@@ -246,21 +233,21 @@ while True:
 runtimehour = 0
 tweeted = False
 # unfollow not followed-bck
-try:
-    unfollow2()
-    clear()
-    unfollow()
-    clear()
-except:
-    pass
+# try:
+#     unfollow2()
+#     clear()
+#     unfollow()
+#     clear()
+# except:
+#     pass
 while True:
-    # tbh i dont know how to handle crashes :3
+    # tbh i don't know how to handle crashes :3
     if runtimehour == 14:
         runtimehour = 0
         sleep(37000)
     while True:
         try:
-            # selecets a random post and then it will tweet it
+            # selects a random post and then it will tweet it
             if tweeted == False:
                 pickpost()
                 sleep(2)
