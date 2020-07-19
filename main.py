@@ -155,11 +155,13 @@ def pickpost():
             tweetText = tweetText[:ch]
         ch -= 1
     tweetText = tweetText.strip()
-    if tweetText[1:42] == 'هیچ گونه پست ارسالی در کانال قرار نمیگیرد':
-        tweetText = credentials.errorText[choice(
-            range(len(credentials.errorText)))]
-        return tweetText
-    print(tweetText)
+    if tweetText[1:5] == 'ادمی':
+        if choice(range(5)) == 1:
+            tweetText = credentials.errorText[choice(
+                range(len(credentials.errorText)))]
+            return tweetText
+        else:
+            tweetText = ''
     return tweetText
 
 
