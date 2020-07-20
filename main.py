@@ -74,41 +74,43 @@ def pintweet():
         driver.switch_to.window(driver.window_handles[1])
         if pin == 1:
             print("Pin : True")
-            driver.get("https://twitter.com/youraccountID")
+            driver.get(
+                f"https://twitter.com/{credentials.account[int(argv[1])][0]}")
             sleep(30)
             # basically pinning the last tweet
             flesh = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
-                (By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div[3]/div/div/div/div/article/div/div[2]/div[2]/div[1]/div/div/div[2]/div')))
+                (By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div/div[3]/div/div/article/div/div/div/div[2]/div[2]/div[1]/div/div/div[2]/div')))
             flesh.click()
             sleep(1)
             driver.find_element(
-                By.XPATH, '//*[@id="react-root"]/div/div/div[1]/div[2]/div/div[2]/div[3]/div/div/div/div[2]').click()
+                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[3]/div/div/div/div[2]').click()
             sleep(1)
             driver.find_element(
-                By.XPATH, '//*[@id="react-root"]/div/div/div[1]/div[2]/div/div/div/div[2]/div[2]/div[3]/div[2]').click()
+                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[2]').click()
     except:
         pass
     sleep(2)
 
 
 def retweet():
-    # retweet function with many tweet sources which allows the bot to pick fresh tweets. with 1/15 chance.
+    # retweet function with many tweet sources which allows the bot to pick fresh tweets. with 1/10 chance.
     try:
-        retweetChance = choice(range(12))
+        retweetChance = choice(range(10))
         driver.execute_script("window.open('');")
         driver.switch_to.window(driver.window_handles[1])
         if retweetChance == 1:
             print("Retweet: True")
             ProfileToSelectTweet = choice(
                 range(len(credentials.retweetSource)))
-            driver.get(credentials.retweetSource[ProfileToSelectTweet])
+            driver.get(
+                f"https://twitter.com/{credentials.retweetSource[ProfileToSelectTweet]}")
             sleep(30)
             ret = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
-                (By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div[1]/div/div/div/div/article/div/div[2]/div[2]/div[2]/div[3]/div[2]/div')))
+                (By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div/div[3]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div[2]/div')))
             ret.click()
             sleep(10)
             driver.find_element(
-                By.XPATH, '//*[@id="react-root"]/div/div/div[1]/div[2]/div/div[2]/div[3]/div/div/div/div').click()
+                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[3]/div/div/div/div').click()
     except:
         pass
 
@@ -178,20 +180,20 @@ def follow_Proccess():
     acc = 1
     followed = 0
     driver.find_element(
-        By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[2]/section/div/div/div['+str(acc)+']/div/div/div/div[2]/div[1]/div[2]/div').click()
-    while(followed != 18):
+        By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div/div['+str(acc)+']/div/div/div/div[2]/div[1]/div[2]/div').click()
+    while(followed != 25):
         try:
             sleep(1)
             acc += 1
             driver.find_element(
-                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[2]/section/div/div/div['+str(acc-2)+']/div/div/div/div[2]/div[1]/div[2]/div').location_once_scrolled_into_view
+                By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div/div['+str(acc-2)+']/div/div/div/div[2]/div[1]/div[2]/div').location_once_scrolled_into_view
             driver.find_element(
-                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[2]/section/div/div/div['+str(acc)+']/div/div/div/div[2]/div[1]/div[2]/div').click()
+                By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div/div['+str(acc)+']/div/div/div/div[2]/div[1]/div[2]/div').click()
             followed += 1
         except:
-            if driver.find_elements(By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[2]/div[3]/div[1]'):
+            if driver.find_elements(By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[1]'):
                 driver.find_element(
-                    By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[2]/div[3]/div[1]').click()
+                    By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[1]').click()
                 sleep(4)
     # going back to main menu
 
@@ -243,20 +245,19 @@ if argv[2] == 1:
     except:
         pass
 while True:
-    # tbh i don't know how to handle crashes :3
     if runtimehour == 14:
         runtimehour = 0
         sleep(37000)
     while True:
         try:
-            # selects a random post and then it will tweet it
+            # selects a random post and then tweet it
             if tweeted == False:
                 sleep(2)
                 tweet(pickpost())
                 clear()
             tweeted = True
             sleep(2)
-            # retweet with 1/15 chance
+            # retweet with 1/10 chance
             retweet()
             clear()
             # pin the last tweet with 1% chance
@@ -268,12 +269,11 @@ while True:
             # checks for runtime hour
             runtimehour += 1
             tweeted = False
-            print(f"All done ! {runtimehour}/14")
+            print(f"All done ! {runtimehour}/28")
             if runtimehour == 14:
                 break
             # here you can set the delay time
-            sleep(3500)
+            sleep(1700)
         except Exception as excep:
             print("hitted an exception")
             print(excep)
-            break
