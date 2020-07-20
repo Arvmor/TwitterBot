@@ -12,11 +12,10 @@ from sys import path, argv
 from urllib.request import urlopen
 import credentials
 
-# you have to authorize your account with below api IF you want to unfollow people
-# there is a high chance to get LIMIT while using below api
-
 
 def unfollow2():
+    # you have to authorize your account with below api IF you want to unfollow people
+    # there is a high chance to get LIMIT while using below api
     driver.execute_script("window.open('');")
     sleep(1)
     driver.switch_to.window(driver.window_handles[1])
@@ -42,11 +41,10 @@ def unfollow2():
     except:
         pass
 
-# you have to authorize your account with below api IF you want to unfollow people
-# there is a high chance to get LIMIT while using below api
-
 
 def unfollow():
+    # you have to authorize your account with below api IF you want to unfollow people
+    # there is a high chance to get LIMIT while using below api
     driver.execute_script("window.open('');")
     sleep(1)
     driver.switch_to.window(driver.window_handles[1])
@@ -277,3 +275,4 @@ while True:
         except Exception as excep:
             print("hitted an exception")
             print(excep)
+            pass
