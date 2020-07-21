@@ -10,6 +10,7 @@ from random import choice
 from bs4 import BeautifulSoup
 from sys import path, argv
 from urllib.request import urlopen
+from random import choice
 import credentials
 
 
@@ -125,18 +126,16 @@ def tweet(tweetText):
     sleep(1)
     driver.switch_to.window(driver.window_handles[1])
     driver.get('https://twitter.com/compose/tweet')
-    sleep(30)
-    sleep(2)
+    sleep(15)
     driver.find_element(
         By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div[2]/div/div/div/div/span').send_keys(tweetText)
     sleep(2)
     try:
         if driver.find_element(
-                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[4]'):
+                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[4]') and int(argv[1]) < 2:
             driver.find_element(
                 By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[4]').click()
-        elif driver.find_element(
-                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[4]/div/div/div[2]/div[4]'):
+        else:
             driver.find_element(
                 By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[4]/div/div/div[2]/div[4]').click()
     except:
@@ -215,7 +214,7 @@ chrome_options.add_argument("--log-level=3")
 chrome_options.add_argument("--log-level=OFF")
 driver = webdriver.Chrome("chromedriver", options=chrome_options)
 driver.get("https://twitter.com/login")
-sleep(30)
+sleep(15)
 # login
 while True:
     driver.find_element(
@@ -226,6 +225,15 @@ while True:
         By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
     sleep(2)
     try:
+        if driver.find_element(By.XPATH, '/html/body/div[2]/div/p[3]/strong').text != '':
+            driver.find_element(By.XPATH, '/html/body/div[2]/div/form/input[8]').send_keys(
+                f"09{credentials.account[int(argv[1])][3]}")
+            sleep(2)
+            driver.find_element(
+                By.XPATH, '/html/body/div[2]/div/form/input[9]').click()
+            sleep(5)
+            driver.get("https://twitter.com/login")
+            break
         if driver.find_element(By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/span').text != "":
             driver.find_element(
                 By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][2])
@@ -280,7 +288,7 @@ while True:
             if runtimehour == 14:
                 break
             # here you can set the delay time
-            sleep(1700)
+            sleep(choice(range(1700, 1800)))
         except Exception as excep:
             print("hitted an exception")
             print(excep)
