@@ -18,7 +18,8 @@ for i in range(1, len(argv)):
         newAccounts.append(argv[i])
     else:
         break
-credentials.account.append(newAccounts)
+if argv[1] != 'EndAccounts':
+    credentials.account.append(newAccounts)
 i += 1
 
 for i in range(i, len(argv)):
