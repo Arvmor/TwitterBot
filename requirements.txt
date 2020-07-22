@@ -1,3 +1,2 @@
 selenium>=3.141.0
-requests>=2.22.0
-PyAutoGUI>=0.9.50
+wget>=3.2
