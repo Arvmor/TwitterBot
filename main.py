@@ -184,13 +184,15 @@ def pickpost():
             download(videoURL, f'/tmp/{argv[1]}TwitterVideo.mp4')
             return tweetText, "video"
     except:
-        if driver.find_element(
-                By.XPATH, '/html/body/div/div[2]/a').get_attribute("style")[37:-3] != '':
-            imageURL = driver.find_element(
-                By.XPATH, '/html/body/div/div[2]/a').get_attribute("style")[37:-3].strip()
-            download(imageURL, f'/tmp/{argv[1]}TwitterImage.jpg')
-            return tweetText, "image"
-    return tweetText, "None"
+        try:
+            if driver.find_element(
+                    By.XPATH, '/html/body/div/div[2]/a').get_attribute("style")[37:-3] != '':
+                imageURL = driver.find_element(
+                    By.XPATH, '/html/body/div/div[2]/a').get_attribute("style")[37:-3].strip()
+                download(imageURL, f'/tmp/{argv[1]}TwitterImage.jpg')
+                return tweetText, "image"
+        except:
+            return tweetText, "None"
 
 
 def follow_Proccess():
@@ -227,7 +229,7 @@ def follow_Proccess():
 # driver settings
 chromedriver = "chromedriver.exe"
 chrome_options = webdriver.ChromeOptions()
-# chrome_options.add_argument("--headless")
+chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--log-level=3")
