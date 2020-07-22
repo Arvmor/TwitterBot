@@ -10,6 +10,7 @@ from random import choice
 from sys import path, argv
 from importlib import reload
 from wget import download
+from os import system
 import credentials
 
 
@@ -112,17 +113,28 @@ def tweet(tweetText):
     sleep(15)
     driver.find_element(
         By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div[2]/div/div/div/div/span').send_keys(tweetText[0])
-    if tweetText[1] == "image":
-        driver.find_element(
-            By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[1]/div[1]').send_keys('/tmp/TwitterImage.jpg')
-    elif tweetText[1] == "video":
-        driver.find_element(
-            By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[1]/div[1]').send_keys('/tmp/TwitterVideo.mp4')
-    sleep(2)
     if int(argv[1]) != 2:
+        if tweetText[1] == "image":
+            driver.find_element(
+                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[1]/input').send_keys(f'/tmp/{argv[1]}TwitterImage.jpg')
+            sleep(120)
+        elif tweetText[1] == "video":
+            driver.find_element(
+                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[1]/input').send_keys(f'/tmp/{argv[1]}TwitterVideo.mp4')
+            sleep(300)
+        sleep(2)
         driver.find_element(
             By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[4]').click()
     else:
+        if tweetText[1] == "image":
+            driver.find_element(
+                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[4]/div/div/div[1]/input').send_keys(f'/tmp/{argv[1]}TwitterImage.jpg')
+            sleep(120)
+        elif tweetText[1] == "video":
+            driver.find_element(
+                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[4]/div/div/div[1]/input').send_keys(f'/tmp/{argv[1]}TwitterVideo.mp4')
+            sleep(300)
+        sleep(2)
         driver.find_element(
             By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[4]/div/div/div[2]/div[4]').click()
     sleep(2)
@@ -134,18 +146,24 @@ def pickpost():
     driver.switch_to.window(driver.window_handles[1])
     postNumbers = choice(range(171509))
     driver.get(f"https://t.me/OfficialPersianTwitter/{postNumbers}")
-    sleep(20)
+    sleep(10)
+    driver.switch_to.frame(
+        driver.find_element(
+            By.XPATH,
+            "/html/body/div[1]/div[2]/div[1]/iframe",
+        )
+    )
     tweetText = driver.find_element(
-        By.XPATH, '/html/head/meta[6]').text.strip()
+        By.XPATH, '/html/body/div/div[2]/div[2]').text.strip()
     ch = -24
     while abs(ch) != len(tweetText):
-        if tweetText[ch] == '》' or tweetText[ch] == '×' or tweetText[ch] == '•' or tweetText[ch] == '»' or tweetText[ch] == '*' or tweetText[ch] == '※':
+        if tweetText[ch] == '》' or tweetText[ch] == '×' or tweetText[ch] == '•' or tweetText[ch] == '»' or tweetText[ch] == '*' or tweetText[ch] == '※' or tweetText[ch] == '☆':
             tweetText = tweetText[:ch]
         ch -= 1
     tweetText = tweetText.strip()
     ch = -1
     while abs(ch) != len(tweetText):
-        if tweetText[ch] == '×' or tweetText[ch] == '•' or tweetText[ch] == '*' or tweetText[ch] == '※':
+        if tweetText[ch] == '×' or tweetText[ch] == '•' or tweetText[ch] == '*' or tweetText[ch] == '※' or tweetText[ch] == '☆':
             tweetText = tweetText[:ch]
         ch -= 1
     tweetText = tweetText.strip()
@@ -160,15 +178,16 @@ def pickpost():
         if driver.find_element(By.XPATH, '/html/body/div/div[2]/a/div[1]/video'):
             videoURL = driver.find_element(
                 By.XPATH, '/html/body/div/div[2]/a/div[1]/video').get_attribute("src")
-            download(videoURL, '/tmp/TwitterVideo.mp4')
+            download(videoURL, f'/tmp/{argv[1]}TwitterVideo.mp4')
             return tweetText, "video"
-        elif driver.find_element(By.XPATH, '/html/body/div/div[2]/a'):
+        if driver.find_element(
+                By.XPATH, '/html/body/div/div[2]/a').get_attribute("style") != '':
             imageURL = driver.find_element(
                 By.XPATH, '/html/body/div/div[2]/a').get_attribute("style")
-            download(imageURL[34:-2], '/tmp/TwitterImage.jpg')
+            download(imageURL[34:-2], f'/tmp/{argv[1]}TwitterImage.jpg')
             return tweetText, "image"
-    except:
-        pass
+    except Exception as excep:
+        print(excep)
     return tweetText, "None"
 
 
@@ -288,6 +307,7 @@ while True:
             if runtimehour == 14:
                 break
             # here you can set the delay time
+            system(f'rm /tmp/{argv[1]}Twitter*')
             sleep(choice(range(1700, 1800)))
             reload(credentials)
         except Exception as excep:
