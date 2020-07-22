@@ -26,21 +26,18 @@ def unfollow2():
     sleep(30)
     userPerPage = 0
     totalUnFollowed = 0
-    try:
-        while totalUnFollowed != 100:
-            while userPerPage != 20:
-                driver.find_element(
-                    By.XPATH, '//*[@id="actionbutton'+str(userPerPage)+'"]').location_once_scrolled_into_view
-                driver.find_element(
-                    By.XPATH, '//*[@id="actionbutton'+str(userPerPage)+'"]').click()
-                userPerPage += 1
-                totalUnFollowed += 1
-                sleep(4)
-            userPerPage = 0
-            driver.get('https://www.unfollowspy.com/notfollow.php')
-            sleep(15)
-    except:
-        pass
+    while totalUnFollowed != 100:
+        while userPerPage != 20:
+            driver.find_element(
+                By.XPATH, '//*[@id="actionbutton'+str(userPerPage)+'"]').location_once_scrolled_into_view
+            driver.find_element(
+                By.XPATH, '//*[@id="actionbutton'+str(userPerPage)+'"]').click()
+            userPerPage += 1
+            totalUnFollowed += 1
+            sleep(4)
+        userPerPage = 0
+        driver.get('https://www.unfollowspy.com/notfollow.php')
+        sleep(15)
 
 
 def unfollow():
@@ -52,66 +49,56 @@ def unfollow():
     driver.get('https://iunfollow.com/accounts/twitter/login/?next=/nonfollow')
     sleep(30)
     usersToUnFollow = 100
-    try:
-        sleep(4)
-        while usersToUnFollow != 51:
-            driver.find_element(
-                By.XPATH, '/html/body/div[2]/div/section[2]/div/div/div/div[2]/ul/li['+str(usersToUnFollow)+']/div[2]/button[1]').location_once_scrolled_into_view
-            driver.find_element(
-                By.XPATH, '/html/body/div[2]/div/section[2]/div/div/div/div[2]/ul/li['+str(usersToUnFollow)+']/div[2]/button[1]').click()
-            usersToUnFollow -= 1
-            sleep(2)
-    except:
-        pass
+    while usersToUnFollow != 51:
+        driver.find_element(
+            By.XPATH, '/html/body/div[2]/div/section[2]/div/div/div/div[2]/ul/li['+str(usersToUnFollow)+']/div[2]/button[1]').location_once_scrolled_into_view
+        driver.find_element(
+            By.XPATH, '/html/body/div[2]/div/section[2]/div/div/div/div[2]/ul/li['+str(usersToUnFollow)+']/div[2]/button[1]').click()
+        usersToUnFollow -= 1
+        sleep(2)
 
 
 def pintweet():
-    try:
-        # pin function with 1% chance.
-        pin = choice(range(100))
-        driver.execute_script("window.open('');")
-        driver.switch_to.window(driver.window_handles[1])
-        if pin == 1:
-            print("Pin : True")
-            driver.get(
-                f"https://twitter.com/{credentials.account[int(argv[1])][0]}")
-            sleep(30)
-            # basically pinning the last tweet
-            flesh = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
-                (By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div/div[3]/div/div/article/div/div/div/div[2]/div[2]/div[1]/div/div/div[2]/div')))
-            flesh.click()
-            sleep(1)
-            driver.find_element(
-                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[3]/div/div/div/div[2]').click()
-            sleep(1)
-            driver.find_element(
-                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[2]').click()
-    except:
-        pass
+    # pin function with 1% chance.
+    pin = choice(range(100))
+    driver.execute_script("window.open('');")
+    driver.switch_to.window(driver.window_handles[1])
+    if pin == 1:
+        print("Pin : True")
+        driver.get(
+            f"https://twitter.com/{credentials.account[int(argv[1])][0]}")
+        sleep(30)
+        # basically pinning the last tweet
+        flesh = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
+            (By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div/div[3]/div/div/article/div/div/div/div[2]/div[2]/div[1]/div/div/div[2]/div')))
+        flesh.click()
+        sleep(1)
+        driver.find_element(
+            By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[3]/div/div/div/div[2]').click()
+        sleep(1)
+        driver.find_element(
+            By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[2]').click()
     sleep(2)
 
 
 def retweet():
     # retweet function with many tweet sources which allows the bot to pick fresh tweets. with 1/10 chance.
-    try:
-        retweetChance = choice(range(10))
-        driver.execute_script("window.open('');")
-        driver.switch_to.window(driver.window_handles[1])
-        if retweetChance == 1:
-            print("Retweet: True")
-            ProfileToSelectTweet = choice(
-                range(len(credentials.retweetSource)))
-            driver.get(
-                f"https://twitter.com/{credentials.retweetSource[ProfileToSelectTweet]}")
-            sleep(30)
-            ret = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
-                (By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div/div[3]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div[2]/div')))
-            ret.click()
-            sleep(10)
-            driver.find_element(
-                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[3]/div/div/div/div').click()
-    except:
-        pass
+    retweetChance = choice(range(10))
+    driver.execute_script("window.open('');")
+    driver.switch_to.window(driver.window_handles[1])
+    if retweetChance == 1:
+        print("Retweet: True")
+        ProfileToSelectTweet = choice(
+            range(len(credentials.retweetSource)))
+        driver.get(
+            f"https://twitter.com/{credentials.retweetSource[ProfileToSelectTweet]}")
+        sleep(30)
+        ret = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
+            (By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div/div[3]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div[2]/div')))
+        ret.click()
+        sleep(10)
+        driver.find_element(
+            By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[3]/div/div/div/div').click()
 
 
 def clear():  # will close useless tabs
@@ -183,7 +170,7 @@ def follow_Proccess():
     followed = 0
     driver.find_element(
         By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div/div['+str(acc)+']/div/div/div/div[2]/div[1]/div[2]/div').click()
-    while(followed != 25):
+    while(followed != 20):
         try:
             sleep(1)
             acc += 1
@@ -220,28 +207,25 @@ while True:
     driver.find_element(
         By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
     sleep(2)
-    try:
-        if driver.find_element(By.XPATH, '/html/body/div[2]/div/p[3]/strong').text != '':
-            driver.find_element(By.XPATH, '/html/body/div[2]/div/form/input[8]').send_keys(
-                f"09{credentials.account[int(argv[1])][3]}")
-            sleep(2)
-            driver.find_element(
-                By.XPATH, '/html/body/div[2]/div/form/input[9]').click()
-            sleep(5)
-            driver.get("https://twitter.com/login")
-            break
-        if driver.find_element(By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/span').text != "":
-            driver.find_element(
-                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][2])
-            driver.find_element(
-                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][1])
-            sleep(2)
-            driver.find_element(
-                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
-            sleep(2)
-            break
-    except:
-        pass
+    if driver.find_element(By.XPATH, '/html/body/div[2]/div/p[3]/strong').text != '':
+        driver.find_element(By.XPATH, '/html/body/div[2]/div/form/input[8]').send_keys(
+            f"09{credentials.account[int(argv[1])][3]}")
+        sleep(2)
+        driver.find_element(
+            By.XPATH, '/html/body/div[2]/div/form/input[9]').click()
+        sleep(5)
+        driver.get("https://twitter.com/login")
+        break
+    if driver.find_element(By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/span').text != "":
+        driver.find_element(
+            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][2])
+        driver.find_element(
+            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][1])
+        sleep(2)
+        driver.find_element(
+            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
+        sleep(2)
+        break
     break
 # the main code
 runtimehour = 0
@@ -253,8 +237,9 @@ if argv[2] == 1:
         clear()
         unfollow()
         clear()
-    except:
-        pass
+    except Exception as excep:
+        print("hitted an exception")
+        print(excep)
 while True:
     if runtimehour == 14:
         runtimehour = 0
@@ -289,4 +274,3 @@ while True:
         except Exception as excep:
             print("hitted an exception")
             print(excep)
-            pass
