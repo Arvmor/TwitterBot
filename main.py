@@ -10,7 +10,7 @@ from random import choice
 from bs4 import BeautifulSoup
 from sys import path, argv
 from urllib.request import urlopen
-from random import choice
+from importlib import reload
 import credentials
 
 
@@ -262,7 +262,7 @@ if argv[2] == 1:
 while True:
     if runtimehour == 14:
         runtimehour = 0
-        sleep(37000)
+        sleep(choice(range(35000, 37000)))
     while True:
         try:
             # selects a random post and then tweet it
@@ -289,6 +289,7 @@ while True:
                 break
             # here you can set the delay time
             sleep(choice(range(1700, 1800)))
+            reload(credentials)
         except Exception as excep:
             print("hitted an exception")
             print(excep)
