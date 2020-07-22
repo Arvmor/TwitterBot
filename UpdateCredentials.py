@@ -23,14 +23,14 @@ i += 1
 
 for i in range(i, len(argv)):
     if argv[i] != 'EndRetweet':
-        credentials.retweetSource.append(argv[i])
+        credentials.retweetSource.append(argv[i][20:])
     else:
         break
 i += 1
 
 for i in range(i, len(argv)):
     if argv[i] != 'EndFollow':
-        credentials.followIdList.append(argv[i])
+        credentials.followIdList.append(argv[i][20:])
     else:
         break
 i += 1
