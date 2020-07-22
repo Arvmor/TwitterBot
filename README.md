@@ -12,7 +12,19 @@ Here is my Bot-accounts (no human activity included in their whole profile, exce
 4. Follow
 5. Unfollow not followed-back users
 # Edit
-Becareful DO NOT FORGET to edit&replace URLs and IDs(for each function) in the code !
+Be Careful DO NOT FORGET to edit&replace URLs and IDs(for each function) in the code !
+# Web Panel
+The WebPanel (Apache2 Service)
+
+### Current features
+- Add new **Bot** account
+- Add **Retweet** source
+- Add **Follow** source
+- Add **Advertizement** Text
+<br>
+Sample ScreenShot:
+<img src="imgs/web.png"/>
+
 # Disclaimer
 *The author is not responsible for any misuse and misbehaviour of the contained DATA.*
 # Requirements
