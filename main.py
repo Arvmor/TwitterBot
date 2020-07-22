@@ -92,11 +92,13 @@ def retweet():
             range(len(credentials.retweetSource)))
         driver.get(
             f"https://twitter.com/{credentials.retweetSource[ProfileToSelectTweet]}")
-        sleep(30)
+        sleep(15)
+        driver.find_element(
+            By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div/div[3]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div[2]/div').location_once_scrolled_into_view
         ret = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
             (By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div/div[3]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div[2]/div')))
         ret.click()
-        sleep(10)
+        sleep(3)
         driver.find_element(
             By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[3]/div/div/div/div').click()
 
@@ -175,19 +177,19 @@ def pickpost():
         else:
             tweetText = ''
     try:
-        if driver.find_element(By.XPATH, '/html/body/div/div[2]/a/div[1]/video'):
+        if driver.find_element(
+                By.XPATH, '/html/body/div/div[2]/a/div[1]/video'):
             videoURL = driver.find_element(
                 By.XPATH, '/html/body/div/div[2]/a/div[1]/video').get_attribute("src")
             download(videoURL, f'/tmp/{argv[1]}TwitterVideo.mp4')
             return tweetText, "video"
+    except:
         if driver.find_element(
-                By.XPATH, '/html/body/div/div[2]/a').get_attribute("style") != '':
+                By.XPATH, '/html/body/div/div[2]/a').get_attribute("style")[37:-3] != '':
             imageURL = driver.find_element(
-                By.XPATH, '/html/body/div/div[2]/a').get_attribute("style")
-            download(imageURL[34:-2], f'/tmp/{argv[1]}TwitterImage.jpg')
+                By.XPATH, '/html/body/div/div[2]/a').get_attribute("style")[37:-3].strip()
+            download(imageURL, f'/tmp/{argv[1]}TwitterImage.jpg')
             return tweetText, "image"
-    except Exception as excep:
-        print(excep)
     return tweetText, "None"
 
 
@@ -220,13 +222,12 @@ def follow_Proccess():
             #         By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[1]').click()
             #     sleep(4)
             break
-    # going back to main menu
 
 
 # driver settings
 chromedriver = "chromedriver.exe"
 chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--headless")
+# chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--log-level=3")

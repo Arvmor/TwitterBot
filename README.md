@@ -26,11 +26,13 @@ Sample ScreenShot:
 <img src="imgs/web.png"/>
 
 # Disclaimer
-*The author is not responsible for any misuse and misbehaviour of the contained DATA.*
+*The author is not responsible for any misuse and misbehavior of the contained DATA.*
 # Requirements
 ```
-Python 3.x
-pip install selenium
+Python 3.8
 apt install chromium-chromedriver
 cp /usr/lib/chromium-browser/chromedriver /usr/bin
 ```
+### Todo
+- [ ] Fix errorText
+- [ ] fix PinTweet
