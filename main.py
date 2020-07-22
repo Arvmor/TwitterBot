@@ -207,25 +207,28 @@ while True:
     driver.find_element(
         By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
     sleep(2)
-    if driver.find_element(By.XPATH, '/html/body/div[2]/div/p[3]/strong').text != '':
-        driver.find_element(By.XPATH, '/html/body/div[2]/div/form/input[8]').send_keys(
-            f"09{credentials.account[int(argv[1])][3]}")
-        sleep(2)
-        driver.find_element(
-            By.XPATH, '/html/body/div[2]/div/form/input[9]').click()
-        sleep(5)
-        driver.get("https://twitter.com/login")
-        break
-    if driver.find_element(By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/span').text != "":
-        driver.find_element(
-            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][2])
-        driver.find_element(
-            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][1])
-        sleep(2)
-        driver.find_element(
-            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
-        sleep(2)
-        break
+    try:
+        if driver.find_element(By.XPATH, '/html/body/div[2]/div/p[3]/strong').text != '':
+            driver.find_element(By.XPATH, '/html/body/div[2]/div/form/input[8]').send_keys(
+                f"09{credentials.account[int(argv[1])][3]}")
+            sleep(2)
+            driver.find_element(
+                By.XPATH, '/html/body/div[2]/div/form/input[9]').click()
+            sleep(5)
+            driver.get("https://twitter.com/login")
+            break
+        if driver.find_element(By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/span').text != "":
+            driver.find_element(
+                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][2])
+            driver.find_element(
+                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][1])
+            sleep(2)
+            driver.find_element(
+                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
+            sleep(2)
+            break
+    except Exception as excep:
+        print(excep)
     break
 # the main code
 runtimehour = 0
@@ -238,7 +241,6 @@ if argv[2] == 1:
         unfollow()
         clear()
     except Exception as excep:
-        print("hitted an exception")
         print(excep)
 while True:
     if runtimehour == 14:
@@ -272,5 +274,4 @@ while True:
             sleep(choice(range(1700, 1800)))
             reload(credentials)
         except Exception as excep:
-            print("hitted an exception")
             print(excep)
