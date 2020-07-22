@@ -7,10 +7,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from random import choice
-from bs4 import BeautifulSoup
 from sys import path, argv
-from urllib.request import urlopen
 from importlib import reload
+from wget import download
 import credentials
 
 
@@ -109,13 +108,16 @@ def clear():  # will close useless tabs
 
 def tweet(tweetText):
     # tweet function, it will tweet whatever is in the tweetText variable
-    driver.execute_script("window.open('');")
-    sleep(1)
-    driver.switch_to.window(driver.window_handles[1])
     driver.get('https://twitter.com/compose/tweet')
     sleep(15)
     driver.find_element(
-        By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div[2]/div/div/div/div/span').send_keys(tweetText)
+        By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div[2]/div/div/div/div/span').send_keys(tweetText[0])
+    if tweetText[1] == "image":
+        driver.find_element(
+            By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[1]/div[1]').send_keys('/tmp/TwitterImage.jpg')
+    elif tweetText[1] == "video":
+        driver.find_element(
+            By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[1]/div[1]').send_keys('/tmp/TwitterVideo.mp4')
     sleep(2)
     if int(argv[1]) != 2:
         driver.find_element(
@@ -128,12 +130,13 @@ def tweet(tweetText):
 
 def pickpost():
     # it will pick a random post from telegram channel which in here is our tweet source
+    driver.execute_script("window.open('');")
+    driver.switch_to.window(driver.window_handles[1])
     postNumbers = choice(range(171509))
-    page = urlopen(
-        'https://t.me/OfficialPersianTwitter/'+str(postNumbers))
-    soup = BeautifulSoup(page, "html.parser")
-    url = soup.find("meta",  property="og:description")
-    tweetText = url["content"].strip()
+    driver.get(f"https://t.me/OfficialPersianTwitter/{postNumbers}")
+    sleep(20)
+    tweetText = driver.find_element(
+        By.XPATH, '/html/head/meta[6]').text.strip()
     ch = -24
     while abs(ch) != len(tweetText):
         if tweetText[ch] == '》' or tweetText[ch] == '×' or tweetText[ch] == '•' or tweetText[ch] == '»' or tweetText[ch] == '*' or tweetText[ch] == '※':
@@ -150,10 +153,23 @@ def pickpost():
         if choice(range(5)) == 1:
             tweetText = credentials.errorText[choice(
                 range(len(credentials.errorText)))]
-            return tweetText
+            return tweetText, "None"
         else:
             tweetText = ''
-    return tweetText
+    try:
+        if driver.find_element(By.XPATH, '/html/body/div/div[2]/a/div[1]/video'):
+            videoURL = driver.find_element(
+                By.XPATH, '/html/body/div/div[2]/a/div[1]/video').get_attribute("src")
+            download(videoURL, '/tmp/TwitterVideo.mp4')
+            return tweetText, "video"
+        elif driver.find_element(By.XPATH, '/html/body/div/div[2]/a'):
+            imageURL = driver.find_element(
+                By.XPATH, '/html/body/div/div[2]/a').get_attribute("style")
+            download(imageURL[34:-2], '/tmp/TwitterImage.jpg')
+            return tweetText, "image"
+    except:
+        pass
+    return tweetText, "None"
 
 
 def follow_Proccess():
