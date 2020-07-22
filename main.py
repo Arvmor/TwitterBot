@@ -180,10 +180,11 @@ def follow_Proccess():
                 By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div/div['+str(acc)+']/div/div/div/div[2]/div[1]/div[2]/div').click()
             followed += 1
         except:
-            if driver.find_elements(By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[1]'):
-                driver.find_element(
-                    By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[1]').click()
-                sleep(4)
+            # if driver.find_elements(By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[1]'):
+            #     driver.find_element(
+            #         By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[1]').click()
+            #     sleep(4)
+            break
     # going back to main menu
 
 
@@ -227,8 +228,8 @@ while True:
                 By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
             sleep(2)
             break
-    except Exception as excep:
-        print(excep)
+    except:
+        pass
     break
 # the main code
 runtimehour = 0
