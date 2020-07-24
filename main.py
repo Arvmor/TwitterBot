@@ -21,6 +21,42 @@ def signal_handler(signal, frame):
     exit(0)
 
 
+def login():  # login
+    driver.get("https://twitter.com/login")
+    sleep(15)
+    while True:
+        driver.find_element(
+            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][2])
+        driver.find_element(
+            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][1])
+        driver.find_element(
+            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
+        sleep(2)
+        try:
+            if driver.find_element(By.XPATH, '/html/body/div[2]/div/p[3]/strong').text != '':
+                driver.find_element(By.XPATH, '/html/body/div[2]/div/form/input[8]').send_keys(
+                    f"09{credentials.account[int(argv[1])][3]}")
+                sleep(2)
+                driver.find_element(
+                    By.XPATH, '/html/body/div[2]/div/form/input[9]').click()
+                sleep(5)
+                driver.get("https://twitter.com/login")
+                break
+            # if driver.find_element(By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/span').text != "":
+            #     driver.find_element(
+            #         By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][2])
+            #     driver.find_element(
+            #         By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][1])
+            #     sleep(2)
+            #     driver.find_element(
+            #         By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
+            #     sleep(2)
+            #     break
+        except:
+            pass
+        break
+
+
 def unfollow2():
     # you have to authorize your account with below api IF you want to unfollow people
     # there is a high chance to get LIMIT while using below api
@@ -238,9 +274,9 @@ def follow_Proccess():
                 sleep(4)
 
 
-# Handle Ctrl-C
-signal(SIGINT, signal_handler)
-# driver settings
+# Variables
+runtimehour = 0
+tweeted = False
 chromedriver = "chromedriver.exe"
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument("--headless")
@@ -248,46 +284,15 @@ chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--log-level=3")
 chrome_options.add_argument("--log-level=OFF")
-driver = webdriver.Chrome("chromedriver", options=chrome_options)
-driver.get("https://twitter.com/login")
-sleep(15)
-# login
-while True:
-    driver.find_element(
-        By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][2])
-    driver.find_element(
-        By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][1])
-    driver.find_element(
-        By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
-    sleep(2)
-    try:
-        if driver.find_element(By.XPATH, '/html/body/div[2]/div/p[3]/strong').text != '':
-            driver.find_element(By.XPATH, '/html/body/div[2]/div/form/input[8]').send_keys(
-                f"09{credentials.account[int(argv[1])][3]}")
-            sleep(2)
-            driver.find_element(
-                By.XPATH, '/html/body/div[2]/div/form/input[9]').click()
-            sleep(5)
-            driver.get("https://twitter.com/login")
-            break
-        if driver.find_element(By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/span').text != "":
-            driver.find_element(
-                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][2])
-            driver.find_element(
-                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][1])
-            sleep(2)
-            driver.find_element(
-                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
-            sleep(2)
-            break
-    except:
-        pass
-    break
-# the main code
-runtimehour = 0
-tweeted = False
-# unfollow not followed-back
-if argv[2] == 1:
+
+
+signal(SIGINT, signal_handler)  # Handle Ctrl-C
+driver = webdriver.Chrome(
+    "chromedriver", options=chrome_options)  # driver settings
+
+# Main code
+login()
+if argv[2] == 1:  # unfollow not followed-back
     try:
         unfollow2()
         clear()
@@ -325,7 +330,10 @@ while True:
                 break
             # here you can set the delay time
             system(f'rm /tmp/{argv[1]}Twitter*')
+            driver.quit()
             sleep(choice(range(1700, 1800)))
             reload(credentials)
+            driver = webdriver.Chrome("chromedriver", options=chrome_options)
+            login()
         except Exception as excep:
             print(excep)
