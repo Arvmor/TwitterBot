@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from signal import signal, SIGINT
 from time import sleep
 from random import choice
 from sys import path, argv
@@ -12,6 +13,12 @@ from importlib import reload
 from wget import download
 from os import system
 import credentials
+
+
+def signal_handler(signal, frame):
+    driver.quit()
+    system(f'rm /tmp/{argv[1]}Twitter*')
+    exit(0)
 
 
 def unfollow2():
@@ -228,6 +235,8 @@ def follow_Proccess():
             break
 
 
+# Handle Ctrl-C
+signal(SIGINT, signal_handler)
 # driver settings
 chromedriver = "chromedriver.exe"
 chrome_options = webdriver.ChromeOptions()
@@ -274,7 +283,7 @@ while True:
 # the main code
 runtimehour = 0
 tweeted = False
-# unfollow not followed-bck
+# unfollow not followed-back
 if argv[2] == 1:
     try:
         unfollow2()
