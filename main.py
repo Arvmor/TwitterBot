@@ -216,6 +216,7 @@ def follow_Proccess():
     # starts following
     acc = 1
     followed = 0
+    errors = 0
     driver.find_element(
         By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div/div['+str(acc)+']/div/div/div/div[2]/div[1]/div[2]/div').click()
     while(followed != 20):
@@ -228,11 +229,13 @@ def follow_Proccess():
                 By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div/div['+str(acc)+']/div/div/div/div[2]/div[1]/div[2]/div').click()
             followed += 1
         except:
-            # if driver.find_elements(By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[1]'):
-            #     driver.find_element(
-            #         By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[1]').click()
-            #     sleep(4)
-            break
+            errors += 1
+            if errors >= 3:
+                break
+            if driver.find_elements(By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[1]'):
+                driver.find_element(
+                    By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[1]').click()
+                sleep(4)
 
 
 # Handle Ctrl-C
