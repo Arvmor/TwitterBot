@@ -149,12 +149,21 @@ def pickpost():
     postNumbers = choice(range(171509))
     driver.get(f"https://t.me/OfficialPersianTwitter/{postNumbers}")
     sleep(10)
-    driver.switch_to.frame(
-        driver.find_element(
-            By.XPATH,
-            "/html/body/div[1]/div[2]/div[1]/iframe",
+    try:
+        driver.switch_to.frame(
+            driver.find_element(
+                By.XPATH,
+                "/html/body/div[1]/div[2]/div[1]/iframe",
+            )
         )
-    )
+    except:
+        if choice(range(5)) == 1:
+            tweetText = credentials.errorText[choice(
+                range(len(credentials.errorText)))]
+            return tweetText, "None"
+        else:
+            tweetText = ''
+            return tweetText, "None"
     tweetText = driver.find_element(
         By.XPATH, '/html/body/div/div[2]/div[2]').text.strip()
     ch = -24
@@ -169,13 +178,6 @@ def pickpost():
             tweetText = tweetText[:ch]
         ch -= 1
     tweetText = tweetText.strip()
-    if tweetText[1:5] == 'ادمی':
-        if choice(range(5)) == 1:
-            tweetText = credentials.errorText[choice(
-                range(len(credentials.errorText)))]
-            return tweetText, "None"
-        else:
-            tweetText = ''
     try:
         if driver.find_element(
                 By.XPATH, '/html/body/div/div[2]/a/div[1]/video'):
