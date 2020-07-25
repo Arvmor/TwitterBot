@@ -110,11 +110,10 @@ def pintweet():
         print("Pin : True")
         driver.get(
             f"https://twitter.com/{credentials.account[int(argv[1])][0]}")
-        sleep(30)
+        sleep(15)
         # basically pinning the last tweet
-        flesh = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
-            (By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div/div[3]/div/div/article/div/div/div/div[2]/div[2]/div[1]/div/div/div[2]/div')))
-        flesh.click()
+        driver.find_element(
+            By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div/div[3]/div/div/article/div/div/div/div[2]/div[2]/div[1]/div/div/div[2]/div').click()
         sleep(1)
         driver.find_element(
             By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[3]/div/div/div/div[2]').click()

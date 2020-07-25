@@ -35,4 +35,4 @@ cp /usr/lib/chromium-browser/chromedriver /usr/bin
 ```
 ### Todo
 - [x] Fix errorText
-- [ ] fix PinTweet
+- [x] fix PinTweet
