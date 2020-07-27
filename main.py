@@ -274,6 +274,7 @@ def follow_Proccess():
 
 
 # Variables
+TotalRunTime = 28
 runtimehour = 0
 tweeted = False
 chromedriver = "chromedriver.exe"
@@ -300,7 +301,7 @@ if argv[2] == 1:  # unfollow not followed-back
     except Exception as excep:
         print(excep)
 while True:
-    if runtimehour == 14:
+    if runtimehour == TotalRunTime:
         runtimehour = 0
         sleep(choice(range(35000, 37000)))
     while True:
@@ -324,8 +325,8 @@ while True:
             # checks for runtime hour
             runtimehour += 1
             tweeted = False
-            print(f"All done ! {runtimehour}/28")
-            if runtimehour == 14:
+            print(f"All done ! {runtimehour}/{TotalRunTime}")
+            if runtimehour == TotalRunTime:
                 break
             # here you can set the delay time
             system(f'rm /tmp/{argv[1]}Twitter*')
