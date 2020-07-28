@@ -61,12 +61,11 @@ def unfollow2():
     # you have to authorize your account with below api IF you want to unfollow people
     # there is a high chance to get LIMIT while using below api
     driver.execute_script("window.open('');")
-    sleep(1)
     driver.switch_to.window(driver.window_handles[1])
     driver.get('https://www.unfollowspy.com/twittersignin.php')
     sleep(20)
     driver.get('https://www.unfollowspy.com/notfollow.php')
-    sleep(30)
+    sleep(15)
     userPerPage = 0
     totalUnFollowed = 0
     while totalUnFollowed != 100:
@@ -87,10 +86,9 @@ def unfollow():
     # you have to authorize your account with below api IF you want to unfollow people
     # there is a high chance to get LIMIT while using below api
     driver.execute_script("window.open('');")
-    sleep(1)
     driver.switch_to.window(driver.window_handles[1])
     driver.get('https://iunfollow.com/accounts/twitter/login/?next=/nonfollow')
-    sleep(30)
+    sleep(15)
     usersToUnFollow = 100
     while usersToUnFollow != 51:
         driver.find_element(
@@ -292,7 +290,7 @@ driver = webdriver.Chrome(
 
 # Main code
 login()
-if argv[2] == 1:  # unfollow not followed-back
+if int(argv[2]) == 1:  # unfollow not followed-back
     try:
         unfollow2()
         clear()
@@ -303,7 +301,7 @@ if argv[2] == 1:  # unfollow not followed-back
 while True:
     if runtimehour == TotalRunTime:
         runtimehour = 0
-        sleep(choice(range(35000, 37000)))
+        sleep(choice(range(34200, 37800)))
     while True:
         try:
             # selects a random post and then tweet it
