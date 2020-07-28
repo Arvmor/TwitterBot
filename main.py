@@ -289,18 +289,18 @@ driver = webdriver.Chrome(
 
 # Main code
 login()
-if int(argv[2]) == 1:  # unfollow not followed-back
-    try:
-        unfollow2()
-        clear()
-        unfollow()
-        clear()
-    except Exception as excep:
-        print(excep)
 while True:
     if runtimehour == TotalRunTime:
         runtimehour = 0
         sleep(choice(range(34200, 37800)))
+        if int(argv[2]) == 1:  # unfollow not followed-back
+            try:
+                unfollow2()
+                clear()
+                unfollow()
+                clear()
+            except Exception as excep:
+                print(excep)
     while True:
         try:
             # selects a random post and then tweet it
