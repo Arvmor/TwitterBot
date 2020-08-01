@@ -34,5 +34,5 @@ apt install chromium-chromedriver
 cp /usr/lib/chromium-browser/chromedriver /usr/bin
 ```
 ### Todo
-- [x] Fix errorText
-- [x] fix PinTweet
+- [ ] fix Retweet function
+- [ ] fix pinTweet function
