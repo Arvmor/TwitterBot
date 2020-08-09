@@ -251,19 +251,19 @@ def follow_Proccess():
     followed = 0
     errors = 0
     driver.find_element(
-        By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div/div['+str(acc)+']/div/div/div/div[2]/div[1]/div[2]/div').click()
+        By.XPATH, f'/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div[{acc}]/div/div/div/div[2]/div[1]/div[2]/div').click()
     while(followed != 20):
         try:
             sleep(1)
             acc += 1
             driver.find_element(
-                By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div/div['+str(acc-2)+']/div/div/div/div[2]/div[1]/div[2]/div').location_once_scrolled_into_view
+                By.XPATH, f'/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div[{acc-2}]/div/div/div/div[2]/div[1]/div[2]/div').location_once_scrolled_into_view
             driver.find_element(
-                By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div/div['+str(acc)+']/div/div/div/div[2]/div[1]/div[2]/div').click()
+                By.XPATH, f'/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div[{acc}]/div/div/div/div[2]/div[1]/div[2]/div').click()
             followed += 1
         except:
             errors += 1
-            if errors >= 3:
+            if errors >= 8:
                 break
             if driver.find_elements(By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[1]'):
                 driver.find_element(
