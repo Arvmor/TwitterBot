@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.6
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -155,7 +155,7 @@ def tweet(tweetText):
     sleep(15)
     driver.find_element(
         By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div[2]/div/div/div/div/span').send_keys(tweetText[0])
-    if int(argv[1]) != 2:
+    if int(argv[1]) == 1:
         if tweetText[1] == "image":
             driver.find_element(
                 By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[1]/input').send_keys(f'/tmp/{argv[1]}TwitterImage.jpg')
@@ -308,7 +308,7 @@ while True:
             if tweeted == False:
                 sleep(2)
                 tweet(pickpost())
-                clear()
+                # clear()
             tweeted = True
             sleep(2)
             # retweet with 1/10 chance
