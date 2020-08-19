@@ -252,7 +252,7 @@ def follow_Proccess():
     errors = 0
     driver.find_element(
         By.XPATH, f'/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div[{acc}]/div/div/div/div[2]/div[1]/div[2]/div').click()
-    while(followed != 20):
+    while(followed != 25):
         try:
             sleep(1)
             acc += 1
@@ -272,7 +272,7 @@ def follow_Proccess():
 
 
 # Variables
-TotalRunTime = 28
+TotalRunTime = 9
 runtimehour = 0
 tweeted = False
 chromedriver = "chromedriver.exe"
@@ -293,7 +293,7 @@ login()
 while True:
     if runtimehour == TotalRunTime:
         runtimehour = 0
-        sleep(choice(range(34200, 37800)))
+        sleep(21600)
         if int(argv[2]) == 1:  # unfollow not followed-back
             try:
                 unfollow2()
@@ -329,7 +329,7 @@ while True:
             # here you can set the delay time
             system(f'rm /tmp/{argv[1]}Twitter*')
             driver.quit()
-            sleep(choice(range(1700, 1800)))
+            sleep(choice(range(7100, 7300)))
             reload(credentials)
             driver = webdriver.Chrome("chromedriver", options=chrome_options)
             login()
