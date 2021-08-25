@@ -111,19 +111,19 @@ def pintweet():
         sleep(15)
         # basically pinning the last tweet
         driver.find_element(
-            By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div/div[3]/div/div/article/div/div/div/div[2]/div[2]/div[1]/div/div/div[2]/div').click()
+            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/div/div[2]/section/div/div/div[2]/div/div/article/div/div/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div/div').click()
         sleep(1)
         driver.find_element(
-            By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[3]/div/div/div/div[2]').click()
+            By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div[2]/div[3]/div/div/div/div[2]').click()
         sleep(1)
         driver.find_element(
-            By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[2]').click()
+            By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[2]').click()
     sleep(2)
 
 
 def retweet():
     # retweet function with many tweet sources which allows the bot to pick fresh tweets. with 1/10 chance.
-    retweetChance = choice(range(10))
+    retweetChance = choice(range(1))
     driver.execute_script("window.open('');")
     driver.switch_to.window(driver.window_handles[1])
     if retweetChance == 1:
@@ -133,14 +133,24 @@ def retweet():
         driver.get(
             f"https://twitter.com/{credentials.retweetSource[ProfileToSelectTweet]}")
         sleep(15)
-        driver.find_element(
-            By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div/div[3]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div[2]/div').location_once_scrolled_into_view
-        ret = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
-            (By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div/div[3]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div[2]/div')))
-        ret.click()
-        sleep(3)
-        driver.find_element(
-            By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[3]/div/div/div/div').click()
+        try: # If it had pin
+            driver.find_element(
+                By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div[2]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div/div[2]/div').location_once_scrolled_into_view
+            ret = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div[2]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div/div[2]/div')))
+            ret.click()
+            sleep(3)
+            driver.find_element(
+                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[3]/div/div/div/div').click()
+        except: # If it didn't have pin
+            driver.find_element(
+                By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div[2]/div/div/div[2]/section/div/div/div[1]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div/div[2]/div').location_once_scrolled_into_view
+            ret = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div[2]/div/div/div[2]/section/div/div/div[1]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div/div[2]/div')))
+            ret.click()
+            sleep(3)
+            driver.find_element(
+                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[3]/div/div/div/div').click()
 
 
 def clear():  # will close useless tabs
@@ -302,8 +312,8 @@ while True:
             retweet()
             clear()
             # pin the last tweet with 1% chance
-            pintweet()
-            clear()
+            # pintweet()
+            # clear()
             #  following Proccess
             follow_Proccess()
             clear()
