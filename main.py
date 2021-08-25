@@ -26,11 +26,11 @@ def login():  # login
     sleep(15)
     while True:
         driver.find_element(
-            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][2])
+            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[2]/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][2])
         driver.find_element(
-            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][1])
+            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[2]/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][1])
         driver.find_element(
-            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/form/div/div[3]/div').click()
+            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[2]/form/div/div[3]/div').click()
         sleep(2)
         try:
             if driver.find_element(By.XPATH, '/html/body/div[2]/div/p[3]/strong').text != '':
@@ -154,31 +154,18 @@ def tweet(tweetText):
     driver.get('https://twitter.com/compose/tweet')
     sleep(15)
     driver.find_element(
-        By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div[2]/div/div/div/div/span').send_keys(tweetText[0])
-    if int(argv[1]) == 1:
-        if tweetText[1] == "image":
-            driver.find_element(
-                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[1]/input').send_keys(f'/tmp/{argv[1]}TwitterImage.jpg')
-            sleep(120)
-        elif tweetText[1] == "video":
-            driver.find_element(
-                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[1]/input').send_keys(f'/tmp/{argv[1]}TwitterVideo.mp4')
-            sleep(300)
-        sleep(2)
+        By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/label/div[1]/div/div/div/div/div[2]/div/div/div/div/span').send_keys(tweetText[0])
+    if tweetText[1] == "image":
         driver.find_element(
-            By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[4]').click()
-    else:
-        if tweetText[1] == "image":
-            driver.find_element(
-                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[4]/div/div/div[1]/input').send_keys(f'/tmp/{argv[1]}TwitterImage.jpg')
-            sleep(120)
-        elif tweetText[1] == "video":
-            driver.find_element(
-                By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[4]/div/div/div[1]/input').send_keys(f'/tmp/{argv[1]}TwitterVideo.mp4')
-            sleep(300)
-        sleep(2)
+            By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[1]/input').send_keys(f'/tmp/{argv[1]}TwitterImage.jpg')
+        sleep(120)
+    elif tweetText[1] == "video":
         driver.find_element(
-            By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[4]/div/div/div[2]/div[4]').click()
+            By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[1]/input').send_keys(f'/tmp/{argv[1]}TwitterVideo.mp4')
+        sleep(300)
+    sleep(2)
+    driver.find_element(
+        By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[2]/div[4]/div/span/span').click()
     sleep(2)
 
 
