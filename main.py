@@ -14,6 +14,20 @@ from wget import download
 from os import system
 import credentials
 
+# Variables
+TotalRunTime = 9
+runtimehour = 0
+tweeted = False
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--log-level=3")
+chrome_options.add_argument("--log-level=OFF")
+chrome_options.add_argument(
+    "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36")
+
+
 
 def signal_handler(signal, frame):
     driver.quit()
@@ -22,39 +36,25 @@ def signal_handler(signal, frame):
 
 
 def login():  # login
+    global driver
     driver.get("https://twitter.com/login")
     sleep(15)
     while True:
-        driver.find_element(
-            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[2]/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][2])
-        driver.find_element(
-            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[2]/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][1])
-        driver.find_element(
-            By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[2]/form/div/div[3]/div').click()
-        sleep(2)
         try:
-            if driver.find_element(By.XPATH, '/html/body/div[2]/div/p[3]/strong').text != '':
-                driver.find_element(By.XPATH, '/html/body/div[2]/div/form/input[8]').send_keys(
-                    f"09{credentials.account[int(argv[1])][3]}")
-                sleep(2)
-                driver.find_element(
-                    By.XPATH, '/html/body/div[2]/div/form/input[9]').click()
-                sleep(5)
-                driver.get("https://twitter.com/login")
-                break
-            # if driver.find_element(By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/span').text != "":
-            #     driver.find_element(
-            #         By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][2])
-            #     driver.find_element(
-            #         By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][1])
-            #     sleep(2)
-            #     driver.find_element(
-            #         By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div').click()
-            #     sleep(2)
-            #     break
+            driver.find_element(
+                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[2]/form/div/div[1]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][0])
+            driver.find_element(
+                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[2]/form/div/div[2]/label/div/div[2]/div/input').send_keys(credentials.account[int(argv[1])][1])
+            driver.find_element(
+                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[2]/form/div/div[3]/div').click()
+            sleep(2)
+            break
         except:
-            pass
-        break
+            print('error on login trying again !')
+            driver.quit()
+            driver = webdriver.Chrome("chromedriver", options=chrome_options)
+            driver.get("https://twitter.com/login")
+            sleep(15)
 
 
 def unfollow2():
@@ -126,7 +126,7 @@ def retweet():
     retweetChance = choice(range(1))
     driver.execute_script("window.open('');")
     driver.switch_to.window(driver.window_handles[1])
-    if retweetChance == 1:
+    if True:
         print("Retweet: True")
         ProfileToSelectTweet = choice(
             range(len(credentials.retweetSource)))
@@ -135,20 +135,20 @@ def retweet():
         sleep(15)
         try: # If it had pin
             driver.find_element(
-                By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div[2]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div/div[2]/div').location_once_scrolled_into_view
-            ret = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
-                (By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div[2]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div/div[2]/div')))
+                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div[3]').location_once_scrolled_into_view
+            ret = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div[3]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div/div[2]/div')))
             ret.click()
-            sleep(3)
+            sleep(5)
             driver.find_element(
                 By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[3]/div/div/div/div').click()
         except: # If it didn't have pin
             driver.find_element(
-                By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div[2]/div/div/div[2]/section/div/div/div[1]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div/div[2]/div').location_once_scrolled_into_view
-            ret = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
-                (By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div[2]/div/div/div[2]/section/div/div/div[1]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div/div[2]/div')))
+                By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div[2]').location_once_scrolled_into_view
+            ret = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div[1]/div/div/article/div/div/div/div[2]/div[2]/div[2]/div[3]/div/div[2]/div')))
             ret.click()
-            sleep(3)
+            sleep(5)
             driver.find_element(
                 By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div[2]/div[3]/div/div/div/div').click()
 
@@ -164,7 +164,8 @@ def tweet(tweetText):
     driver.get('https://twitter.com/compose/tweet')
     sleep(15)
     driver.find_element(
-        By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/label/div[1]/div/div/div/div/div[2]/div/div/div/div/span').send_keys(tweetText[0])
+        By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/label/div[1]/div/div/div/div/div[2]/div/div/div/div/span').send_keys(tweetText[0] + credentials.footer[choice(
+                range(len(credentials.footer)))])
     if tweetText[1] == "image":
         driver.find_element(
             By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[1]/input').send_keys(f'/tmp/{argv[1]}TwitterImage.jpg')
@@ -249,7 +250,7 @@ def follow_Proccess():
     errors = 0
     driver.find_element(
         By.XPATH, f'/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div[{acc}]/div/div/div/div[2]/div[1]/div[2]/div').click()
-    while(followed != 25):
+    while(followed != 6):
         try:
             sleep(1)
             acc += 1
@@ -266,19 +267,6 @@ def follow_Proccess():
                 driver.find_element(
                     By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[3]/div[1]').click()
                 sleep(4)
-
-
-# Variables
-TotalRunTime = 9
-runtimehour = 0
-tweeted = False
-chromedriver = "chromedriver.exe"
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument("--log-level=3")
-chrome_options.add_argument("--log-level=OFF")
 
 
 signal(SIGINT, signal_handler)  # Handle Ctrl-C
@@ -304,11 +292,15 @@ while True:
             # selects a random post and then tweet it
             if tweeted == False:
                 sleep(2)
-                tweet(pickpost())
+                # tweet(pickpost())
                 # clear()
             tweeted = True
             sleep(2)
             # retweet with 1/10 chance
+            retweet()
+            clear()
+            retweet()
+            clear()
             retweet()
             clear()
             # pin the last tweet with 1% chance
@@ -326,7 +318,7 @@ while True:
             # here you can set the delay time
             system(f'rm /tmp/{argv[1]}Twitter*')
             driver.quit()
-            sleep(choice(range(7100, 7300)))
+            sleep(choice(range(1800, 1900)))
             reload(credentials)
             driver = webdriver.Chrome("chromedriver", options=chrome_options)
             login()
