@@ -19,7 +19,7 @@ TotalRunTime = 12
 runtimehour = 0
 fireFox_options = webdriver.FirefoxOptions()
 
-# fireFox_options.add_argument("--headless")
+fireFox_options.add_argument("--headless")
 fireFox_options.add_argument("--no-sandbox")
 fireFox_options.add_argument("--disable-dev-shm-usage")
 fireFox_options.add_argument("--log-level=3")
@@ -31,7 +31,6 @@ fireFox_options.add_argument(
 
 def signal_handler(signal, frame):
     driver.quit()
-    system(f'rm /tmp/{argv[1]}Twitter*')
     exit(0)
 
 
@@ -173,7 +172,10 @@ def tweet(tweetText):
     element = driver.find_element(
         By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[2]/div[4]')
     driver.execute_script("arguments[0].click();", element)
-    sleep(2)
+    print('Tweeted !')
+    sleep(60)
+    for pic in tweetText[1]:
+        system(f'rm /Users/arvin/Desktop/Coding/GitHub/TwitterBot/data/{pic}')
 
 
 def pickpost():
@@ -231,15 +233,15 @@ while True:
 
     while True:
         try:
-            # selects a random post and then tweet it
-            sleep(2)
-            tweet(pickpost())
-            # clear()
-            sleep(2)
             # retweet with 1/10 chance
             for _ in range(choice([0,0,1,1,2,3])):
                 retweet()
                 clear()
+            sleep(2)
+            # selects a random post and then tweet it
+            tweet(pickpost())
+            # clear()
+            sleep(2)
             # pin the last tweet with 1% chance
             # pintweet()
             # clear()

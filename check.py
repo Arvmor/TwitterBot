@@ -9,6 +9,8 @@ for folder in os.listdir('data/'):
             if file[-3:] == 'txt':
                 with open(f'data/{folder}/{file}', 'r') as f:
                     data = f.read()
+                    if '@' in data or 'link' in data.lower():
+                        continue
                     print(data)
                 quality = input("(q/Enter)")
                 if quality == '':
