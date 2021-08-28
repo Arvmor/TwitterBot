@@ -11,20 +11,20 @@ from random import choice
 from sys import path, argv
 from importlib import reload
 from wget import download
-from os import system
+from os import system, listdir
 import credentials
 
 # Variables
-TotalRunTime = 9
+TotalRunTime = 12
 runtimehour = 0
-tweeted = False
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument("--log-level=3")
-chrome_options.add_argument("--log-level=OFF")
-chrome_options.add_argument(
+fireFox_options = webdriver.FirefoxOptions()
+
+# fireFox_options.add_argument("--headless")
+fireFox_options.add_argument("--no-sandbox")
+fireFox_options.add_argument("--disable-dev-shm-usage")
+fireFox_options.add_argument("--log-level=3")
+fireFox_options.add_argument("--log-level=OFF")
+fireFox_options.add_argument(
     "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36")
 
 
@@ -52,7 +52,7 @@ def login():  # login
         except:
             print('error on login trying again !')
             driver.quit()
-            driver = webdriver.Chrome("chromedriver", options=chrome_options)
+            driver = webdriver.Firefox(executable_path=r'geckodriver', options=fireFox_options)
             driver.get("https://twitter.com/login")
             sleep(15)
 
@@ -163,76 +163,26 @@ def tweet(tweetText):
     # tweet function, it will tweet whatever is in the tweetText variable
     driver.get('https://twitter.com/compose/tweet')
     sleep(15)
+    for pic in tweetText[1]:
+        driver.find_element(
+            By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[1]/input').send_keys(f'/Users/arvin/Desktop/Coding/GitHub/TwitterBot/data/{pic}')
+        sleep(5)
     driver.find_element(
-        By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/label/div[1]/div/div/div/div/div[2]/div/div/div/div/span').send_keys(tweetText[0] + credentials.footer[choice(
-                range(len(credentials.footer)))])
-    if tweetText[1] == "image":
-        driver.find_element(
-            By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[1]/input').send_keys(f'/tmp/{argv[1]}TwitterImage.jpg')
-        sleep(120)
-    elif tweetText[1] == "video":
-        driver.find_element(
-            By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[1]/input').send_keys(f'/tmp/{argv[1]}TwitterVideo.mp4')
-        sleep(300)
+        By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/label/div[1]/div/div/div/div/div[2]/div').send_keys(tweetText[0] + choice(credentials.footer))
     sleep(2)
-    driver.find_element(
-        By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[2]/div[4]/div/span/span').click()
+    element = driver.find_element(
+        By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[2]/div[4]')
+    driver.execute_script("arguments[0].click();", element)
     sleep(2)
 
 
 def pickpost():
-    # it will pick a random post from telegram channel which in here is our tweet source
-    driver.execute_script("window.open('');")
-    driver.switch_to.window(driver.window_handles[1])
-    postNumbers = choice(range(171509))
-    driver.get(f"https://t.me/OfficialPersianTwitter/{postNumbers}")
-    sleep(10)
-    try:
-        driver.switch_to.frame(
-            driver.find_element(
-                By.XPATH,
-                "/html/body/div[1]/div[2]/div[1]/iframe",
-            )
-        )
-    except:
-        if choice(range(5)) == 1:
-            tweetText = credentials.errorText[choice(
-                range(len(credentials.errorText)))]
-            return tweetText, "None"
-        else:
-            tweetText = ''
-            return tweetText, "None"
-    tweetText = driver.find_element(
-        By.XPATH, '/html/body/div/div[2]/div[2]').text.strip()
-    ch = -24
-    while abs(ch) != len(tweetText):
-        if tweetText[ch] == '》' or tweetText[ch] == '×' or tweetText[ch] == '•' or tweetText[ch] == '»' or tweetText[ch] == '*' or tweetText[ch] == '※' or tweetText[ch] == '☆':
-            tweetText = tweetText[:ch]
-        ch -= 1
-    tweetText = tweetText.strip()
-    ch = -1
-    while abs(ch) != len(tweetText):
-        if tweetText[ch] == '×' or tweetText[ch] == '•' or tweetText[ch] == '*' or tweetText[ch] == '※' or tweetText[ch] == '☆':
-            tweetText = tweetText[:ch]
-        ch -= 1
-    tweetText = tweetText.strip()
-    try:
-        if driver.find_element(
-                By.XPATH, '/html/body/div/div[2]/a/div[1]/video'):
-            videoURL = driver.find_element(
-                By.XPATH, '/html/body/div/div[2]/a/div[1]/video').get_attribute("src")
-            download(videoURL, f'/tmp/{argv[1]}TwitterVideo.mp4')
-            return tweetText, "video"
-    except:
-        try:
-            if driver.find_element(
-                    By.XPATH, '/html/body/div/div[2]/a').get_attribute("style")[37:-3] != '':
-                imageURL = driver.find_element(
-                    By.XPATH, '/html/body/div/div[2]/a').get_attribute("style")[37:-3].strip()
-                download(imageURL, f'/tmp/{argv[1]}TwitterImage.jpg')
-                return tweetText, "image"
-        except:
-            return tweetText, "None"
+    pickedPhotos = []
+    hoeName = choice(listdir('data/'))
+    for _ in range(choice([3,4])):
+        pickedPhotos.append(hoeName+'/'+choice(listdir('data/'+hoeName)))
+    tweetText = choice(credentials.texts) + f'.\n.\n.\nCredit💌: {hoeName} '
+    return tweetText, pickedPhotos
 
 
 def follow_Proccess():
@@ -250,7 +200,7 @@ def follow_Proccess():
     errors = 0
     driver.find_element(
         By.XPATH, f'/html/body/div/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/section/div/div/div[{acc}]/div/div/div/div[2]/div[1]/div[2]/div').click()
-    while(followed != 6):
+    while(followed != 20):
         try:
             sleep(1)
             acc += 1
@@ -270,8 +220,7 @@ def follow_Proccess():
 
 
 signal(SIGINT, signal_handler)  # Handle Ctrl-C
-driver = webdriver.Chrome(
-    "chromedriver", options=chrome_options)  # driver settings
+driver = webdriver.Firefox(executable_path=r'geckodriver', options=fireFox_options)
 
 # Main code
 login()
@@ -279,30 +228,18 @@ while True:
     if runtimehour == TotalRunTime:
         runtimehour = 0
         sleep(21600)
-        if int(argv[2]) == 1:  # unfollow not followed-back
-            try:
-                unfollow2()
-                clear()
-                unfollow()
-                clear()
-            except Exception as excep:
-                print(excep)
+
     while True:
         try:
             # selects a random post and then tweet it
-            if tweeted == False:
-                sleep(2)
-                # tweet(pickpost())
-                # clear()
-            tweeted = True
+            sleep(2)
+            tweet(pickpost())
+            # clear()
             sleep(2)
             # retweet with 1/10 chance
-            retweet()
-            clear()
-            retweet()
-            clear()
-            retweet()
-            clear()
+            for _ in range(choice([0,0,1,1,2,3])):
+                retweet()
+                clear()
             # pin the last tweet with 1% chance
             # pintweet()
             # clear()
@@ -311,16 +248,14 @@ while True:
             clear()
             # checks for runtime hour
             runtimehour += 1
-            tweeted = False
             print(f"All done ! {runtimehour}/{TotalRunTime}")
             if runtimehour == TotalRunTime:
                 break
             # here you can set the delay time
-            system(f'rm /tmp/{argv[1]}Twitter*')
             driver.quit()
             sleep(choice(range(1800, 1900)))
             reload(credentials)
-            driver = webdriver.Chrome("chromedriver", options=chrome_options)
+            driver = webdriver.Firefox(executable_path=r'geckodriver', options=fireFox_options)
             login()
         except Exception as excep:
             print(excep)
