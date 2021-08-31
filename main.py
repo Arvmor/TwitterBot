@@ -164,7 +164,7 @@ def tweet(tweetText):
     sleep(15)
     for pic in tweetText[1]:
         driver.find_element(
-            By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[1]/input').send_keys(f'/Users/arvin/Desktop/Coding/GitHub/TwitterBot/data/{pic}')
+            By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[1]/input').send_keys(f'./data/{pic}')
         sleep(5)
     driver.find_element(
         By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/label/div[1]/div/div/div/div/div[2]/div').send_keys(tweetText[0] + choice(credentials.footer))
@@ -175,7 +175,7 @@ def tweet(tweetText):
     print('Tweeted !')
     sleep(60)
     for pic in tweetText[1]:
-        system(f'rm /Users/arvin/Desktop/Coding/GitHub/TwitterBot/data/{pic}')
+        system(f'rm ./data/{pic}')
 
 
 def pickpost():
@@ -234,7 +234,7 @@ while True:
     while True:
         try:
             # retweet with 1/10 chance
-            for _ in range(choice([0,0,1,1,2,3])):
+            for _ in range(choice([0,0,0,0,0,1,1,1,2,2,3])):
                 retweet()
                 clear()
             sleep(2)
@@ -255,7 +255,7 @@ while True:
                 break
             # here you can set the delay time
             driver.quit()
-            sleep(choice(range(1800, 1900)))
+            sleep(choice(range(3000, 3200)))
             reload(credentials)
             driver = webdriver.Firefox(executable_path=r'geckodriver', options=fireFox_options)
             login()
